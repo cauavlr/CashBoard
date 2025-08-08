@@ -1,0 +1,7 @@
+- add categoria na hora de add um valor
+
+- tela de login para cada usuario / salvar as informacoes de cada usuario
+
+- criar grafico 
+
+-
