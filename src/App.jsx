@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { bankAPI, importBankTransactions } from "./services/bankAPI.js";
 
 export default function Dashboard() {
   // Estados para dados bancários
