@@ -2,18 +2,14 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function Dashboard() {
-  // Estados para dados bancários
   const [bankAccount, setBankAccount] = useState(null);
   const [bankConnected, setBankConnected] = useState(false);
   const [loadingBank, setLoadingBank] = useState(false);
-  
-  // Simulacao
   const [nova, setNova] = useState({
   desc: "",
   valor: "",
   tipo: "receita",
   cat: "",
-  
 });
 const handleExcluir = (id) => {
     const confirmacao = window.confirm("Deseja excluir esta transação?");
@@ -24,7 +20,6 @@ const handleExcluir = (id) => {
   };
 
 const [filtroTipo, setFiltroTipo] = useState("todas");
-
 const [transactions, setTransactions] = useState(() => {
   const dadosSalvos = localStorage.getItem("transacoes");
   return dadosSalvos ? JSON.parse(dadosSalvos) : [
@@ -59,15 +54,12 @@ useEffect(() => {
   localStorage.setItem("transacoes", JSON.stringify(transactions));
 }, [transactions]);
 
-  // Função para conectar com o banco mock
   const connectToBank = async () => {
     setLoadingBank(true);
     try {
       const accountInfo = await bankAPI.getAccountInfo();
       setBankAccount(accountInfo);
       setBankConnected(true);
-      
-      // Mostrar notificação de sucesso
       alert(`Conectado com sucesso ao banco!\nTitular: ${accountInfo.titular}\nAgência: ${accountInfo.agencia}\nConta: ${accountInfo.numero}`);
     } catch (error) {
       alert('Erro ao conectar com o banco: ' + error.message);
@@ -75,19 +67,14 @@ useEffect(() => {
       setLoadingBank(false);
     }
   };
-
-  // Função para importar transações do banco
   const importTransactionsFromBank = async () => {
     if (!bankConnected) {
       alert('Conecte-se ao banco primeiro!');
       return;
     }
-
     setLoadingBank(true);
     try {
       const bankTransactions = await importBankTransactions();
-      
-      // Mesclar com transações existentes, evitando duplicatas
       const existingIds = new Set(transactions.map(t => t.id));
       const newTransactions = bankTransactions.filter(t => !existingIds.has(t.id));
       
@@ -103,8 +90,6 @@ useEffect(() => {
       setLoadingBank(false);
     }
   };
-
-  // Função para desconectar do banco
   const disconnectFromBank = () => {
     setBankAccount(null);
     setBankConnected(false);
@@ -112,7 +97,6 @@ useEffect(() => {
   };
 
 
-  // Calculo simples
   const saldoAtual = transactions.reduce((acc, t) => acc + t.amount, 0);
   const totalReceitas = transactions
     .filter((t) => t.amount > 0)
@@ -159,10 +143,10 @@ const transacoesFiltradas = transactions.filter((t) => {
         <div className="d-flex align-items-center border-bottom pb-3 mb-3">
           <img
             src="https://placehold.co/40x40"
-            alt="Logo Carteira"
+            alt="Logo Site"
             className="rounded-circle me-2"
           />
-          <h1 className="h5 text-primary mb-0">Carteira</h1>
+          <h1 className="h5 text-primary mb-0">site</h1>
         </div>
         <nav>
           <ul className="nav flex-column gap-2">
@@ -239,16 +223,10 @@ const transacoesFiltradas = transactions.filter((t) => {
                 </button>
               </div>
             )}
-            
-            <button
-  className="btn btn-primary d-flex align-items-center"
-  data-bs-toggle="modal"
-  data-bs-target="#modalTransacao"
->
-  <i className="fas fa-plus me-2"></i> Nova Transação
-</button>
 
-            
+            <button className="btn btn-primary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modaalTransacao">
+              <i className="fas fa-plus me-2"></i>
+              </button>          
             <div className="position-relative">
               <i className="fas fa-bell text-secondary fs-4"></i>
               <span
@@ -307,24 +285,17 @@ const transacoesFiltradas = transactions.filter((t) => {
           </div>
           <div className="mb-3">
             <label className="form-label">Valor</label>
-            <input
-  type="text"
-  className="form-control"
-  value={nova.valor}
-  onChange={(e) => {
-    const raw = e.target.value.replace(/[^\d,-]/g, ""); 
-    const centavos = parseFloat(raw) / 100;
-
-    const formatado = centavos.toLocaleString("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    });
-
-    setNova({ ...nova, valor: formatado });
-  }}
-  required
-/>
-
+            <input type="text" className="form-control" value={nova.valor} onChange={(e) => {
+              const raw = e.target.value.replace(/[^\d,-]/g, "");
+              const centavos = parseFloat(raw) / 100;
+                  const formatado = centavos.toLocaleString("pt-BR", { 
+                    style: "currency",
+                    currency: "BRL",
+                  });
+                  setNova({ ...nova, valor: formatado });
+                }}
+                required
+                />
           </div>
           <div className="mb-3">
             <label className="form-label">Tipo</label>
@@ -512,24 +483,21 @@ const transacoesFiltradas = transactions.filter((t) => {
     <th className="text-end">Ações</th>
   </tr>
 </thead>
-
-              <tbody>
-                {transacoesFiltradas.map((t) => (
-                  <tr key={t.id}>
-                    <td className="d-flex align-items-center gap-2">
-                      <span
-                        className={`rounded-circle d-inline-flex justify-content-center align-items-center`}
-                        style={{
-                          width: "32px",
-                          height: "32px",
-                          backgroundColor:
-                            t.amount > 0 ? "#d1e7dd" : "#f8d7da",
-                          color: t.amount > 0 ? "#0f5132" : "#842029",
-                        }}
-                      >
-                        <i className={`fas ${t.icon}`}></i>
-                      </span>
-                      {t.description}
+  <tbody>
+    {transacoesFiltradas.map((t) => (
+      <tr key={t.id}>
+      <td className="d-flex align-items-center gap-2">
+      <span className={`rounded-circle d-inline-flex justify-content-center align-items-center`}
+       style={{
+        width: "32px",
+        height: "32px",
+        backgroundColor:
+        t.amount > 0 ? "#d1e7dd" : "#f8d7da",
+        color: t.amount > 0 ? "#0f5132" : "#842029",
+       }}>
+        <i className={`fas ${t.icon}`}></i>
+      </span>
+                   {t.description}
                     </td>
                     <td>{t.category}</td>
                     <td>{t.date}</td>
