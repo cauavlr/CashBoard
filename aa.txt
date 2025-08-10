@@ -1,7 +1,6 @@
-- add categoria na hora de add um valor
-
-- tela de login para cada usuario / salvar as informacoes de cada usuario
-
-- criar grafico 
-
--
+- integra um banco
+- tela login/reegistro
+- grafico linha p/ mes
+- grafico pizza p/ meta
+- alerta entrada/retiro da conta
+- tela escura 
